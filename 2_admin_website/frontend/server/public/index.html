@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin Portal — ADM Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#f0f2f8;color:#0A0F2C;min-height:100vh;overflow:hidden}
+.app{display:flex;height:100vh}
+
+/* ─── SIDEBAR ─── */
+.sidebar{width:230px;min-width:230px;background:#0A0F2C;display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,0.06)}
+.sb-logo-wrap{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:10px}
+.sb-logo-wrap img{height:34px;object-fit:contain}
+.sb-logo-text{display:flex;flex-direction:column}
+.sb-brand{font-family:'Sora',sans-serif;font-weight:800;font-size:12px;color:#FF6B2B;letter-spacing:.08em}
+.sb-tagline{font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:.04em;text-transform:uppercase;margin-top:1px}
+.sb-section{padding:16px 18px 5px;font-size:9px;font-weight:600;letter-spacing:.1em;color:rgba(255,255,255,0.22);text-transform:uppercase}
+.nav-btn{display:flex;align-items:center;gap:10px;padding:10px 14px;margin:2px 8px;border-radius:8px;border:none;background:transparent;color:rgba(255,255,255,0.48);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;width:calc(100% - 16px);text-align:left;transition:all .15s}
+.nav-btn:hover{background:rgba(255,255,255,0.07);color:#fff}
+.nav-btn.active{background:#FF6B2B;color:#fff}
+.nav-icon{font-size:14px;width:20px;text-align:center;flex-shrink:0}
+.badge{background:#EF4444;color:#fff;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:auto}
+.sb-footer{margin-top:auto;padding:14px 16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px}
+.sb-av{width:34px;height:34px;border-radius:50%;background:#FF6B2B;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:700;font-size:12px;color:#fff;flex-shrink:0}
+.sb-uname{font-size:12px;font-weight:600;color:#fff}
+.sb-urole{font-size:10px;color:rgba(255,255,255,0.3)}
+
+/* ─── TOPBAR ─── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:#fff;height:58px;padding:0 26px;display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-shrink:0;border-bottom:1px solid #e8ecf4;box-shadow:0 1px 4px rgba(10,15,44,0.06)}
+.tb-page-title{margin-right:auto;font-family:'Sora',sans-serif;font-weight:700;font-size:16px;color:#0A0F2C}
+.tb-bell{background:transparent;border:none;cursor:pointer;font-size:20px;position:relative;padding:4px;line-height:1}
+.tb-bell-dot{position:absolute;top:2px;right:2px;width:7px;height:7px;background:#EF4444;border-radius:50%}
+.tb-user{text-align:right}
+.tb-welcome{font-size:9px;color:#9CA3AF;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.tb-wname{font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:#0A0F2C}
+.tb-av{width:36px;height:36px;border-radius:50%;background:#FF6B2B;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:12px;color:#fff;cursor:pointer}
+
+/* ─── CONTENT ─── */
+.content{flex:1;overflow-y:auto;padding:22px 26px}
+
+/* ─── PAGE HEADER ─── */
+.pg-header{margin-bottom:20px}
+.pg-title{font-family:'Sora',sans-serif;font-weight:700;font-size:20px;color:#0A0F2C}
+.pg-sub{font-size:12px;color:#9CA3AF;margin-top:3px}
+
+/* ─── STAT CARDS (top row) ─── */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.stat-card{background:#fff;border-radius:14px;padding:20px;border:1px solid #e8ecf4;position:relative;overflow:hidden;box-shadow:0 2px 8px rgba(10,15,44,0.04)}
+.stat-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:14px 0 0 14px}
+.stat-card.c-blue::before{background:#3B82F6}
+.stat-card.c-orange::before{background:#F97316}
+.stat-card.c-green::before{background:#22C55E}
+.stat-card.c-red::before{background:#EF4444}
+.stat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px}
+.stat-num{font-family:'Sora',sans-serif;font-weight:800;font-size:34px;line-height:1}
+.stat-lbl{font-size:12px;color:#9CA3AF;margin-top:5px;font-weight:500}
+
+/* ─── SECTION LABEL ─── */
+.sec-label{font-family:'Sora',sans-serif;font-weight:700;font-size:14px;color:#0A0F2C;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec-label span{font-size:11px;font-weight:500;color:#9CA3AF;font-family:'DM Sans',sans-serif}
+
+/* ─── DEPT CARDS + ACCORDION ─── */
+.dept-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+.dept-wrap{border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(10,15,44,0.05)}
+.dept-card{background:#fff;padding:16px;border:1px solid #e8ecf4;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:13px;border-bottom:none;border-radius:14px}
+.dept-wrap.open .dept-card{border-radius:14px 14px 0 0;border-bottom:1px solid #e8ecf4}
+.dept-card:hover{background:#fafbff}
+.dept-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.dept-info{flex:1;min-width:0}
+.dept-name{font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:#0A0F2C}
+.dept-sub{font-size:10px;color:#9CA3AF;margin-top:1px}
+.dept-badge{font-family:'Sora',sans-serif;font-weight:700;font-size:18px;flex-shrink:0}
+.dept-chevron{font-size:11px;color:#9CA3AF;transition:transform .25s;flex-shrink:0;margin-left:4px}
+.dept-wrap.open .dept-chevron{transform:rotate(180deg)}
+
+/* ─── DEPT DROPDOWN ─── */
+.dept-drop{background:#fff;border:1px solid #e8ecf4;border-top:none;border-radius:0 0 14px 14px;overflow:hidden;max-height:0;transition:max-height .3s ease}
+.dept-wrap.open .dept-drop{max-height:200px}
+.dept-drop-inner{padding:14px 16px 16px}
+.dept-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ds-box{background:#f9fafb;border-radius:10px;padding:10px 8px;text-align:center;border:1px solid #f0f2f8}
+.ds-num{font-family:'Sora',sans-serif;font-weight:800;font-size:20px}
+.ds-lbl{font-size:9px;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+
+/* ─── RECENT SUBMISSIONS TABLE ─── */
+.card{background:#fff;border-radius:14px;border:1px solid #e8ecf4;box-shadow:0 2px 8px rgba(10,15,44,0.04);overflow:hidden}
+.card-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:2px solid #f4f6fb}
+.card-title{font-family:'Sora',sans-serif;font-weight:700;font-size:14px;color:#0A0F2C}
+.card-sub{font-size:11px;color:#9CA3AF;margin-top:2px}
+.text-link{background:transparent;border:none;color:#FF6B2B;cursor:pointer;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 16px;font-size:9px;font-weight:700;letter-spacing:.08em;color:#9CA3AF;text-transform:uppercase;background:#fafbff;border-bottom:1px solid #f0f2f8}
+td{padding:12px 16px;font-size:12px;border-bottom:1px solid #f9fafb;color:#374151;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafbff}
+.token-lbl{color:#FF6B2B;font-weight:700;font-size:11px;font-family:'Sora',sans-serif}
+
+/* ─── STATUS PILL ─── */
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px}
+.pill.Pending{background:#FFF7ED;color:#EA580C}
+.pill.Published{background:#F0FDF4;color:#16A34A}
+.pill.Rejected{background:#FFF1F2;color:#DC2626}
+.pill-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.pill.Pending .pill-dot{background:#F97316}
+.pill.Published .pill-dot{background:#22C55E}
+.pill.Rejected .pill-dot{background:#EF4444}
+
+/* ─── SUBMISSIONS PAGE ─── */
+.subs-toolbar{display:flex;gap:10px;margin-bottom:18px;align-items:center;flex-wrap:wrap}
+.search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #e8ecf4;border-radius:10px;padding:0 14px;flex:1;min-width:220px;transition:border-color .15s}
+.search-box:focus-within{border-color:#FF6B2B}
+.search-box input{border:none;background:transparent;padding:10px 0;color:#0A0F2C;font-size:13px;outline:none;font-family:'DM Sans',sans-serif;width:100%}
+.search-icon{color:#9CA3AF;font-size:16px;flex-shrink:0}
+.sel-wrap select{background:#fff;border:1.5px solid #e8ecf4;border-radius:10px;padding:10px 13px;color:#0A0F2C;font-size:12px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .15s;cursor:pointer}
+.sel-wrap select:focus{border-color:#FF6B2B}
+.count-chip{font-size:11px;color:#6B7280;white-space:nowrap;background:#fff;border:1px solid #e8ecf4;border-radius:20px;padding:6px 14px;font-weight:600}
+
+/* ─── SUBMISSION CARD ─── */
+.sub-list{display:flex;flex-direction:column;gap:10px}
+.sub-card{background:#fff;border-radius:14px;border:1px solid #e8ecf4;padding:0;overflow:hidden;box-shadow:0 2px 8px rgba(10,15,44,0.04);transition:box-shadow .2s,border-color .2s}
+.sub-card:hover{box-shadow:0 6px 20px rgba(10,15,44,0.09);border-color:#d0d7e8}
+.sub-card-inner{display:flex;align-items:stretch;gap:0}
+.sub-dept-bar{width:5px;flex-shrink:0;border-radius:14px 0 0 14px}
+.sub-main{display:flex;align-items:center;gap:16px;padding:16px 20px;flex:1;min-width:0}
+.sub-id-col{min-width:130px}
+.sub-token{font-size:11px;font-weight:700;color:#FF6B2B;font-family:'Sora',sans-serif;margin-bottom:4px}
+.sub-dept-tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;margin-bottom:6px}
+.sub-team{font-family:'Sora',sans-serif;font-weight:700;font-size:14px;color:#0A0F2C}
+.sub-center{flex:1;min-width:0;padding:0 10px}
+.sub-proj{font-family:'Sora',sans-serif;font-weight:600;font-size:14px;color:#0A0F2C;margin-bottom:3px}
+.sub-desc{font-size:12px;color:#6B7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px}
+.sub-date{font-size:11px;color:#9CA3AF}
+.sub-right-col{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:10px;min-width:120px;flex-shrink:0}
+.btn-review{background:#FF6B2B;border:none;border-radius:8px;padding:8px 16px;color:#fff;cursor:pointer;font-size:11px;font-weight:700;font-family:'DM Sans',sans-serif;transition:background .15s;white-space:nowrap}
+.btn-review:hover{background:#e85c1c}
+
+/* ─── PUBLISHED PAGE ─── */
+.pub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pub-card{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #e8ecf4;box-shadow:0 2px 8px rgba(10,15,44,0.04);transition:transform .2s,box-shadow .2s}
+.pub-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(10,15,44,0.1)}
+.pub-banner{height:80px;display:flex;align-items:center;justify-content:center;font-size:28px;position:relative}
+.pub-live-badge{position:absolute;top:10px;right:10px;background:#22C55E;color:#fff;font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.06em}
+.pub-body{padding:14px}
+.pub-title{font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:#0A0F2C;margin-bottom:3px}
+.pub-meta{font-size:11px;color:#9CA3AF;line-height:1.6;margin-bottom:12px}
+.pub-actions{display:flex;gap:8px}
+.btn-view-live{flex:2;padding:8px;background:#FF6B2B;border:none;border-radius:8px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s}
+.btn-view-live:hover{background:#e85c1c}
+.btn-unpublish{flex:1;padding:8px;background:transparent;border:1.5px solid #e8ecf4;border-radius:8px;color:#6B7280;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-unpublish:hover{border-color:#EF4444;color:#EF4444}
+
+/* ─── SETTINGS ─── */
+.settings-card{background:#fff;border-radius:14px;max-width:500px;border:1px solid #e8ecf4;box-shadow:0 2px 8px rgba(10,15,44,0.04);overflow:hidden}
+.settings-head{background:#0A0F2C;padding:16px 22px;display:flex;align-items:center;gap:12px}
+.settings-head-icon{width:38px;height:38px;border-radius:10px;background:#FF6B2B;display:flex;align-items:center;justify-content:center;font-size:18px}
+.settings-head-title{font-family:'Sora',sans-serif;font-weight:700;font-size:14px;color:#fff}
+.settings-head-sub{font-size:11px;color:rgba(255,255,255,0.35);margin-top:1px}
+.setting-row{display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-bottom:1px solid #f4f6fb}
+.setting-row:last-child{border-bottom:none}
+.setting-label{font-size:13px;color:#6B7280;font-weight:500}
+.setting-val{font-size:13px;font-weight:700;color:#0A0F2C}
+
+/* ──── REVIEW DRAWER ──── */
+.overlay{position:fixed;inset:0;background:rgba(10,15,44,0.5);z-index:200;display:flex;justify-content:flex-end;backdrop-filter:blur(3px)}
+.drawer{width:620px;background:#f4f6fb;height:100vh;display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(10,15,44,0.18)}
+
+/* Drawer Header */
+.dr-header{background:#0A0F2C;padding:18px 22px;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}
+.dr-header-left{flex:1;min-width:0}
+.dr-token{font-size:11px;color:#FF6B2B;font-weight:700;font-family:'Sora',sans-serif;margin-bottom:4px}
+.dr-title{font-family:'Sora',sans-serif;font-weight:700;font-size:16px;color:#fff;margin-bottom:2px}
+.dr-team{font-size:12px;color:rgba(255,255,255,0.4)}
+.dr-close{background:rgba(255,255,255,0.1);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:12px;transition:background .15s}
+.dr-close:hover{background:rgba(255,255,255,0.2)}
+
+/* Drawer Status Bar */
+.dr-statusbar{background:#0D1330;padding:12px 22px;display:flex;align-items:center;gap:8px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.06)}
+.dr-dept-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600}
+.dr-current-status{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600}
+
+/* Drawer Tabs */
+.dr-tabs{display:flex;background:#fff;border-bottom:2px solid #e8ecf4;flex-shrink:0}
+.dr-tab{flex:1;padding:13px 8px;background:transparent;border:none;border-bottom:2px solid transparent;color:#9CA3AF;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;transition:all .15s;margin-bottom:-2px}
+.dr-tab.active{color:#FF6B2B;border-bottom-color:#FF6B2B}
+
+/* Drawer Body */
+.dr-body{flex:1;overflow-y:auto;padding:20px}
+
+/* Field boxes */
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.f-box{background:#fff;border-radius:10px;padding:12px 14px;border:1px solid #e8ecf4}
+.f-label{font-size:9px;color:#9CA3AF;text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:4px}
+.f-val{font-size:13px;font-weight:600;color:#0A0F2C}
+.f-section-label{font-size:9px;color:#9CA3AF;text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:8px;margin-top:14px}
+.desc-box{background:#fff;border-radius:10px;padding:14px;font-size:12px;color:#374151;line-height:1.75;border:1px solid #e8ecf4;margin-bottom:4px}
+.ms-item{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;background:#fff;border-radius:8px;margin-bottom:6px;font-size:12px;font-weight:600;color:#0A0F2C;border:1px solid #e8ecf4}
+.ms-date{color:#9CA3AF;font-weight:400;font-size:11px}
+.tag-wrap{display:flex;flex-wrap:wrap;gap:6px}
+.tech-tag{background:#FFF7ED;color:#FF6B2B;border-radius:6px;padding:4px 11px;font-size:11px;font-weight:600;border:1px solid #FFD5C2}
+
+/* Files tab */
+.banner-preview{height:100px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:14px;border:2px dashed #e8ecf4}
+.file-item{display:flex;align-items:center;gap:12px;padding:11px 14px;background:#fff;border-radius:10px;margin-bottom:8px;border:1px solid #e8ecf4}
+.file-icon{font-size:20px;flex-shrink:0}
+.file-name{flex:1;font-size:12px;font-weight:600;color:#0A0F2C}
+.file-size{font-size:11px;color:#9CA3AF}
+.file-dl{background:transparent;border:1.5px solid #FF6B2B;border-radius:6px;color:#FF6B2B;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.file-dl:hover{background:#FF6B2B;color:#fff}
+
+/* Validation tab */
+.val-hint{font-size:12px;color:#6B7280;margin-bottom:14px;background:#fff;border-radius:10px;padding:12px 14px;border:1px solid #e8ecf4;display:flex;align-items:center;gap:8px}
+.chk-row{display:flex;align-items:center;gap:12px;padding:13px;background:#fff;border-radius:10px;margin-bottom:8px;cursor:pointer;border:1.5px solid #e8ecf4;transition:all .15s}
+.chk-row.checked{border-color:#22C55E;background:#F0FDF4}
+.chk-box{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;border:2px solid #e8ecf4;background:#fff}
+.chk-box.checked{background:#22C55E;border-color:#22C55E}
+.chk-lbl{font-size:12px;color:#6B7280;font-weight:500;flex:1}
+.chk-lbl.checked{color:#0A0F2C;font-weight:600}
+.val-progress{background:#fff;border-radius:10px;padding:12px 14px;border:1px solid #e8ecf4;margin-bottom:14px}
+.val-prog-label{font-size:11px;color:#6B7280;font-weight:600;margin-bottom:8px;display:flex;justify-content:space-between}
+.val-prog-bar{height:6px;background:#f0f2f8;border-radius:3px;overflow:hidden}
+.val-prog-fill{height:100%;background:#22C55E;border-radius:3px;transition:width .3s}
+
+/* ──── DRAWER FOOTER (ACTION AREA) ──── */
+.dr-footer{flex-shrink:0;background:#fff;border-top:2px solid #e8ecf4}
+.dr-footer-top{padding:14px 20px;display:flex;gap:10px;align-items:stretch}
+.btn-publish-big{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 20px;border:none;border-radius:12px;cursor:pointer;font-family:'Sora',sans-serif;transition:all .2s;gap:2px}
+.btn-publish-big .btn-icon{font-size:22px;line-height:1}
+.btn-publish-big .btn-main-lbl{font-size:13px;font-weight:800;letter-spacing:.04em}
+.btn-publish-big .btn-sub-lbl{font-size:10px;font-weight:500;opacity:.8}
+.btn-action-sm{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:12px 16px;border-radius:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;min-width:90px}
+.btn-action-sm .btn-icon{font-size:18px;line-height:1}
+.btn-action-sm .btn-action-lbl{font-size:11px;font-weight:700}
+.pub-enabled{background:linear-gradient(135deg,#22C55E,#16A34A);color:#fff;border:none}
+.pub-enabled:hover{box-shadow:0 6px 20px rgba(34,197,94,0.35);transform:translateY(-1px)}
+.pub-disabled{background:#f0f2f8;color:#9CA3AF;border:none;cursor:not-allowed}
+.btn-reject-action{background:#FFF1F2;color:#DC2626;border:1.5px solid #FCA5A5}
+.btn-reject-action:hover{background:#DC2626;color:#fff;border-color:#DC2626}
+.btn-changes-action{background:#FFF7ED;color:#EA580C;border:1.5px solid #FED7AA}
+.btn-changes-action:hover{background:#EA580C;color:#fff;border-color:#EA580C}
+
+/* ──── MODAL ──── */
+.modal-bg{position:fixed;inset:0;background:rgba(10,15,44,0.6);z-index:400;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal{background:#fff;border-radius:16px;padding:28px;width:440px;box-shadow:0 24px 60px rgba(10,15,44,0.2)}
+.modal-icon{font-size:40px;margin-bottom:12px;display:block}
+.modal-title{font-family:'Sora',sans-serif;font-weight:700;font-size:18px;color:#0A0F2C;margin-bottom:6px}
+.modal-sub{font-size:13px;color:#6B7280;margin-bottom:16px;line-height:1.5}
+.modal textarea{width:100%;background:#f9fafb;border:1.5px solid #e8ecf4;border-radius:10px;padding:13px;color:#0A0F2C;font-size:13px;outline:none;resize:none;font-family:'DM Sans',sans-serif;transition:border-color .15s}
+.modal textarea:focus{border-color:#FF6B2B}
+.modal-actions{display:flex;gap:10px;margin-top:16px}
+.modal-confirm{flex:1;padding:12px;border-radius:10px;border:none;color:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;cursor:pointer}
+.modal-cancel{flex:1;padding:12px;border-radius:10px;border:1.5px solid #e8ecf4;background:transparent;color:#6B7280;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .15s}
+.modal-cancel:hover{border-color:#0A0F2C;color:#0A0F2C}
+
+/* ──── TOASTS ──── */
+#toasts{position:fixed;top:16px;right:16px;z-index:600;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{background:#fff;border-radius:12px;padding:13px 18px;font-size:13px;display:flex;align-items:center;gap:10px;min-width:260px;box-shadow:0 6px 24px rgba(10,15,44,0.14);animation:tin .35s cubic-bezier(.34,1.56,.64,1);font-weight:500;color:#0A0F2C;border:1px solid #e8ecf4}
+.toast.s{border-left:4px solid #22C55E}
+.toast.e{border-left:4px solid #EF4444}
+.toast.i{border-left:4px solid #FF6B2B}
+.toast-ico{font-size:18px;flex-shrink:0}
+@keyframes tin{from{transform:translateX(115%);opacity:0}to{transform:translateX(0);opacity:1}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ══ SIDEBAR ══ -->
+  <div class="sidebar">
+    <div class="sb-logo-wrap">
+      <img src="/logo.png" alt="ADM Analytics"/>
+      <div class="sb-logo-text">
+        <div class="sb-brand">ADM ANALYTICS</div>
+        <div class="sb-tagline">Admin Portal</div>
+      </div>
+    </div>
+    <div class="sb-section">Navigation</div>
+    <button class="nav-btn active" id="nav-dashboard"   onclick="goTo('dashboard')"><span class="nav-icon">⊞</span>Dashboard</button>
+    <button class="nav-btn"        id="nav-submissions" onclick="goTo('submissions')"><span class="nav-icon">⊡</span>Submissions<span class="badge" id="pb">4</span></button>
+    <button class="nav-btn"        id="nav-published"   onclick="goTo('published')"><span class="nav-icon">◎</span>Published Projects</button>
+    <button class="nav-btn"        id="nav-settings"    onclick="goTo('settings')"><span class="nav-icon">⚙</span>Settings</button>
+    <div class="sb-footer">
+      <div class="sb-av">AD</div>
+      <div><div class="sb-uname">Admin User</div><div class="sb-urole">Administrator</div></div>
+    </div>
+  </div>
+
+  <!-- ══ MAIN ══ -->
+  <div class="main">
+    <div class="topbar">
+      <div class="tb-page-title" id="tb-page-title">Dashboard</div>
+      <button class="tb-bell" onclick="showToast('No new notifications','i')">🔔<span class="tb-bell-dot"></span></button>
+      <div class="tb-user"><div class="tb-welcome">Welcome</div><div class="tb-wname">Admin</div></div>
+      <div class="tb-av">AD</div>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<div id="drawer-root"></div>
+<div id="modal-root"></div>
+<div id="toasts"></div>
+
+<script>
+/* ══════════════ DATA ══════════════ */
+var DATA=[
+  {id:"ADM-2024-005",team:"FinEdge",       proj:"Real-Time Financial Risk Monitor",          dept:"Finance",          date:"Mar 14, 2024",time:"01:50 PM",status:"Pending",   desc:"A live monitoring dashboard for financial risk indicators, integrating market feeds, internal ledgers, and regulatory compliance checks.",lead:"Arjun Mehta",  email:"arjun@finedge.internal",  code:"PRJ-2024-FIN-001",cat:"Internal Tool",  start:"Jan 1, 2024", end:"Apr 30, 2024",ms:[{n:"Architecture Design",d:"Jan 10"},{n:"API Integration",d:"Feb 5"},{n:"Testing & QA",d:"Mar 1"}],   tech:["React","Node.js","PostgreSQL","Redis"]},
+  {id:"ADM-2024-003",team:"Growth Hackers",proj:"Customer Engagement Analytics Suite",       dept:"Sales Commercial",date:"Mar 12, 2024",time:"04:30 PM",status:"Pending",   desc:"A real-time analytics dashboard tracking customer engagement metrics, funnel conversions, and campaign performance.",                              lead:"Priya Sharma", email:"priya@gh.internal",       code:"PRJ-2024-SAL-003",cat:"Client Project",start:"Jan 15, 2024",end:"May 15, 2024",ms:[{n:"Data Pipeline",d:"Jan 20"},{n:"Dashboard MVP",d:"Feb 15"}],                              tech:["Python","Tableau","Snowflake","Kafka"]},
+  {id:"ADM-2024-001",team:"Team Nexus",    proj:"AI-Powered Supply Chain Optimizer",         dept:"Engineering",     date:"Mar 10, 2024",time:"03:00 PM",status:"Pending",   desc:"An end-to-end AI platform leveraging ML to predict supply chain disruptions and automate procurement workflows.",                                  lead:"Kiran Patel",  email:"kiran@nexus.internal",    code:"PRJ-2024-ENG-001",cat:"R&D",           start:"Dec 1, 2023", end:"Jun 30, 2024",ms:[{n:"ML Training",d:"Jan 25"},{n:"API Dev",d:"Feb 20"},{n:"Pilot",d:"Mar 5"}],              tech:["Python","TensorFlow","FastAPI","MongoDB"]},
+  {id:"ADM-2024-007",team:"HRTech Unit",   proj:"Employee Wellbeing & Engagement Hub",       dept:"Human Resources", date:"Mar 9, 2024", time:"03:40 PM",status:"Pending",   desc:"A confidential internal portal for employee mood tracking, wellbeing surveys, recognition programs, and engagement analytics.",                    lead:"Sneha Reddy",  email:"sneha@hrtech.internal",   code:"PRJ-2024-HR-007", cat:"Internal Tool", start:"Jan 10, 2024",end:"Apr 10, 2024",ms:[{n:"Survey Module",d:"Feb 1"},{n:"Analytics Engine",d:"Feb 28"}],                       tech:["React","Django","MySQL","AWS S3"]},
+  {id:"ADM-2024-002",team:"Design Collective",proj:"Internal Design System 3.0",             dept:"Engineering",     date:"Mar 8, 2024", time:"07:45 PM",status:"Published", desc:"A comprehensive design system unifying the visual language across all internal products with components, tokens, and documentation.",               lead:"Rahul Nair",   email:"rahul@dc.internal",       code:"PRJ-2024-ENG-002",cat:"Infrastructure",start:"Dec 15, 2023",end:"Mar 31, 2024",ms:[{n:"Token Library",d:"Jan 5"},{n:"Component Lib",d:"Feb 10"},{n:"Docs Site",d:"Mar 1"}],tech:["Figma","Storybook","React","TypeScript"]},
+  {id:"ADM-2024-004",team:"OptiFlow",      proj:"Automated Workflow Management System",      dept:"Operations",      date:"Mar 5, 2024", time:"10:15 PM",status:"Rejected",  desc:"A no-code workflow automation platform enabling departments to automate repetitive tasks, approvals, and reporting.",                               lead:"Amit Kumar",   email:"amit@optiflow.internal",  code:"PRJ-2024-OPS-004",cat:"Internal Tool", start:"Jan 5, 2024", end:"May 1, 2024",  ms:[{n:"Core Engine",d:"Jan 30"},{n:"UI Builder",d:"Feb 25"}],                          tech:["Vue.js","Go","PostgreSQL","Docker"]},
+  {id:"ADM-2024-006",team:"CloudWave",     proj:"Multi-Cloud Infrastructure Orchestrator",   dept:"Engineering",     date:"Mar 1, 2024", time:"06:30 PM",status:"Published", desc:"A unified control plane managing workloads across AWS, Azure, and GCP with cost optimization and automated failover.",                              lead:"Vijay Singh",  email:"vijay@cloudwave.internal",code:"PRJ-2024-ENG-006",cat:"Infrastructure",start:"Dec 10, 2023",end:"Apr 15, 2024",ms:[{n:"AWS",d:"Jan 15"},{n:"Azure",d:"Feb 5"},{n:"GCP",d:"Feb 25"}],                   tech:["Terraform","Kubernetes","Go","Prometheus"]},
+  {id:"ADM-2024-009",team:"SalesForce Alpha",proj:"Revenue Pipeline Forecasting Engine",     dept:"Sales Commercial",date:"Feb 25, 2024",time:"05:00 PM",status:"Published", desc:"ML-powered pipeline forecasting tool generating accurate revenue predictions and deal win probabilities.",                                          lead:"Deepa Thomas", email:"deepa@sfa.internal",       code:"PRJ-2024-SAL-009",cat:"Client Project",start:"Jan 1, 2024", end:"Mar 31, 2024",ms:[{n:"CRM Integration",d:"Jan 20"},{n:"ML Pipeline",d:"Feb 10"}],                         tech:["Python","Salesforce API","scikit-learn","Tableau"]},
+  {id:"ADM-2024-008",team:"ExecInsights",  proj:"C-Suite KPI Command Center",               dept:"Executive",       date:"Feb 20, 2024",time:"02:30 PM",status:"Published", desc:"A real-time executive command center aggregating cross-functional KPIs and board-level metrics for C-suite decision making.",                       lead:"Rajesh Iyer",  email:"rajesh@exec.internal",    code:"PRJ-2024-EXE-008",cat:"Internal Tool", start:"Dec 20, 2023",end:"Mar 15, 2024",ms:[{n:"KPI Framework",d:"Jan 10"},{n:"Live Dashboard",d:"Feb 5"}],                      tech:["React","GraphQL","ClickHouse","D3.js"]},
+  {id:"ADM-2024-010",team:"FinOps Team",   proj:"Budget P&L Automation Portal",             dept:"Finance",         date:"Jan 15, 2024",time:"01:30 PM",status:"Published", desc:"Automated P&L generation and budget variance analysis integrating with ERP systems to reduce month-end close time.",                                  lead:"Nisha Gupta",  email:"nisha@finops.internal",   code:"PRJ-2024-FIN-010",cat:"Internal Tool", start:"Nov 15, 2023",end:"Feb 15, 2024",ms:[{n:"ERP Integration",d:"Dec 15"},{n:"Reporting Engine",d:"Jan 5"}],                    tech:["SAP","Python","Power BI","Azure"]}
+];
+
+var DC={Executive:"#3B82F6","Sales Commercial":"#84CC16",Finance:"#22C55E",Operations:"#F97316","Human Resources":"#A855F7",Engineering:"#6366F1"};
+var DI={Executive:"🏢","Sales Commercial":"📈",Finance:"💰",Operations:"⚙️","Human Resources":"👥",Engineering:"🔧"};
+var DD={Executive:"Strategic overview & C-suite KPIs","Sales Commercial":"Revenue, pipeline & forecasting",Finance:"Budget, P&L & cost analysis",Operations:"Efficiency, logistics & capacity","Human Resources":"Headcount, talent & engagement",Engineering:"Delivery, quality & tech metrics"};
+
+var PAGE="dashboard",SEARCH="",FILTER="All",SORT="Newest";
+var DR_SUB=null,DR_TAB=0,DR_CHK=[false,false,false,false,false];
+var OPEN_DEPT=null;
+
+/* ══════════════ HELPERS ══════════════ */
+function pendingCount(){return DATA.filter(function(s){return s.status==="Pending";}).length;}
+function updateBadge(){var p=pendingCount();var el=document.getElementById("pb");el.textContent=p;el.style.display=p>0?"":"none";}
+
+function pillHtml(s){return '<span class="pill '+s+'"><span class="pill-dot"></span>'+s+'</span>';}
+
+function showToast(msg,type){
+  var icons={s:"✅",e:"❌",i:"🔔"};
+  var el=document.createElement("div");
+  el.className="toast "+type;
+  el.innerHTML='<span class="toast-ico">'+icons[type]+'</span>'+msg;
+  document.getElementById("toasts").appendChild(el);
+  setTimeout(function(){el.remove();},3500);
+}
+
+function deptColor(d){return DC[d]||"#6366F1";}
+function deptIcon(d){return DI[d]||"📁";}
+
+/* ══════════════ NAVIGATION ══════════════ */
+var PAGE_TITLES={dashboard:"Dashboard",submissions:"Submissions",published:"Published Projects",settings:"Settings"};
+function goTo(page){
+  PAGE=page;
+  OPEN_DEPT=null;
+  ["dashboard","submissions","published","settings"].forEach(function(p){
+    document.getElementById("nav-"+p).className="nav-btn"+(p===page?" active":"");
+  });
+  document.getElementById("tb-page-title").textContent=PAGE_TITLES[page]||page;
+  render();
+}
+function render(){
+  var c=document.getElementById("content");
+  if(PAGE==="dashboard") dashPage(c);
+  else if(PAGE==="submissions") subsPage(c);
+  else if(PAGE==="published") pubPage(c);
+  else settingsPage(c);
+}
+
+/* ══════════════ DASHBOARD ══════════════ */
+function deptStats(deptName){
+  var items=DATA.filter(function(s){return s.dept===deptName;});
+  return{
+    total:items.length,
+    published:items.filter(function(s){return s.status==="Published";}).length,
+    pending:items.filter(function(s){return s.status==="Pending";}).length,
+    rejected:items.filter(function(s){return s.status==="Rejected";}).length
+  };
+}
+
+function toggleDept(deptName){
+  OPEN_DEPT=OPEN_DEPT===deptName?null:deptName;
+  renderDeptCards();
+}
+
+function renderDeptCards(){
+  var depts={};
+  DATA.forEach(function(s){depts[s.dept]=(depts[s.dept]||0)+1;});
+  var dNames=Object.keys(depts);
+  var html=dNames.map(function(d){
+    var col=deptColor(d);
+    var icon=deptIcon(d);
+    var desc=DD[d]||"Total projects this period";
+    var stats=deptStats(d);
+    var isOpen=OPEN_DEPT===d;
+    var checkedPct=Math.round((stats.published/stats.total)*100)||0;
+    return '<div class="dept-wrap'+(isOpen?" open":"")+'" id="dw-'+d.replace(/ /g,"_")+'">'
+      +'<div class="dept-card" onclick="toggleDept(\''+d+'\')">'
+        +'<div class="dept-icon" style="background:'+col+'18;color:'+col+'">'+icon+'</div>'
+        +'<div class="dept-info">'
+          +'<div class="dept-name">'+d+'</div>'
+          +'<div class="dept-sub">'+desc+'</div>'
+        +'</div>'
+        +'<div class="dept-badge" style="color:'+col+'">'+stats.total+'</div>'
+        +'<div class="dept-chevron">▼</div>'
+      +'</div>'
+      +'<div class="dept-drop">'
+        +'<div class="dept-drop-inner">'
+          +'<div style="font-size:10px;color:#9CA3AF;font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">Project Breakdown</div>'
+          +'<div class="dept-stats">'
+            +'<div class="ds-box"><div class="ds-num" style="color:#6366F1">'+stats.total+'</div><div class="ds-lbl">Total</div></div>'
+            +'<div class="ds-box"><div class="ds-num" style="color:#22C55E">'+stats.published+'</div><div class="ds-lbl">Published</div></div>'
+            +'<div class="ds-box"><div class="ds-num" style="color:#F97316">'+stats.pending+'</div><div class="ds-lbl">Pending</div></div>'
+            +'<div class="ds-box"><div class="ds-num" style="color:#EF4444">'+stats.rejected+'</div><div class="ds-lbl">Rejected</div></div>'
+          +'</div>'
+        +'</div>'
+      +'</div>'
+    +'</div>';
+  }).join("");
+  document.getElementById("dept-grid-container").innerHTML=html;
+}
+
+function dashPage(c){
+  var pend=pendingCount();
+  var pub=DATA.filter(function(s){return s.status==="Published";}).length;
+  var rej=DATA.filter(function(s){return s.status==="Rejected";}).length;
+
+  var rows=DATA.slice(0,5).map(function(s){
+    var col=deptColor(s.dept);
+    return '<tr>'
+      +'<td><span class="token-lbl">'+s.id+'</span></td>'
+      +'<td style="font-weight:700;color:#0A0F2C;font-family:\'Sora\',sans-serif">'+s.team+'</td>'
+      +'<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+s.proj+'</td>'
+      +'<td><span style="font-size:11px;font-weight:600;color:'+col+';background:'+col+'14;padding:3px 9px;border-radius:20px">'+s.dept+'</span></td>'
+      +'<td style="color:#9CA3AF;font-size:11px">'+s.date+'</td>'
+      +'<td>'+pillHtml(s.status)+'</td>'
+      +'<td><button class="review-link" style="background:transparent;border:none;color:#FF6B2B;cursor:pointer;font-size:12px;font-weight:600;font-family:\'DM Sans\',sans-serif" onclick="openDrawer(\''+s.id+'\')">Review →</button></td>'
+    +'</tr>';
+  }).join("");
+
+  c.innerHTML=
+    '<div class="pg-header"><div class="pg-title">Dashboard</div><div class="pg-sub">Overview of all project submissions across departments</div></div>'
+
+    +'<div class="stat-row">'
+      +'<div class="stat-card c-blue"><div class="stat-icon" style="background:#EFF6FF;color:#3B82F6">📋</div><div class="stat-num" style="color:#3B82F6">'+DATA.length+'</div><div class="stat-lbl">Total Submissions</div></div>'
+      +'<div class="stat-card c-orange"><div class="stat-icon" style="background:#FFF7ED;color:#F97316">⏳</div><div class="stat-num" style="color:#F97316">'+pend+'</div><div class="stat-lbl">Pending Review</div></div>'
+      +'<div class="stat-card c-green"><div class="stat-icon" style="background:#F0FDF4;color:#22C55E">✅</div><div class="stat-num" style="color:#22C55E">'+pub+'</div><div class="stat-lbl">Published</div></div>'
+      +'<div class="stat-card c-red"><div class="stat-icon" style="background:#FFF1F2;color:#EF4444">❌</div><div class="stat-num" style="color:#EF4444">'+rej+'</div><div class="stat-lbl">Rejected</div></div>'
+    +'</div>'
+
+    +'<div class="sec-label">Solve Architecture by Function <span>Click a card to view project breakdown</span></div>'
+    +'<div class="dept-grid" id="dept-grid-container"></div>'
+
+    +'<div class="card">'
+      +'<div class="card-header">'
+        +'<div><div class="card-title">Recent Submissions</div><div class="card-sub">Last 5 project submissions received</div></div>'
+        +'<button class="text-link" onclick="goTo(\'submissions\')">View all →</button>'
+      +'</div>'
+      +'<div class="tbl-wrap"><table>'
+        +'<thead><tr><th>Token</th><th>Team</th><th>Project</th><th>Department</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>'
+        +'<tbody>'+rows+'</tbody>'
+      +'</table></div>'
+    +'</div>';
+
+  renderDeptCards();
+}
+
+/* ══════════════ SUBMISSIONS PAGE ══════════════ */
+function subsPage(c){
+  var filtered=DATA.filter(function(s){
+    var mf=FILTER==="All"||s.status===FILTER;
+    var ms=!SEARCH||s.team.toLowerCase().indexOf(SEARCH.toLowerCase())>-1
+      ||s.proj.toLowerCase().indexOf(SEARCH.toLowerCase())>-1
+      ||s.id.toLowerCase().indexOf(SEARCH.toLowerCase())>-1;
+    return mf&&ms;
+  }).sort(function(a,b){return SORT==="Newest"?b.id.localeCompare(a.id):a.id.localeCompare(b.id);});
+
+  var statusTabs=["All","Pending","Published","Rejected"];
+  var tabHtml=statusTabs.map(function(st){
+    var count=st==="All"?DATA.length:DATA.filter(function(s){return s.status===st;}).length;
+    var stColor=st==="Pending"?"#F97316":st==="Published"?"#22C55E":st==="Rejected"?"#EF4444":"#6366F1";
+    var isActive=FILTER===st;
+    return '<button onclick="FILTER=\''+st+'\';subsPage(document.getElementById(\'content\'))" style="'
+      +'display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:20px;border:1.5px solid '+(isActive?(stColor==="All"?"#6366F1":stColor):"#e8ecf4")+';background:'+(isActive?(st==="All"?"#EEF2FF":st==="Pending"?"#FFF7ED":st==="Published"?"#F0FDF4":"#FFF1F2"):"#fff")
+      +';color:'+(isActive?(st==="All"?"#4F46E5":stColor):"#6B7280")+';font-family:\'DM Sans\',sans-serif;font-weight:600;font-size:12px;cursor:pointer;transition:all .15s">'
+      +'<span>'+st+'</span>'
+      +'<span style="background:'+(isActive?(st==="All"?"#4F46E5":stColor):"#e8ecf4")+';color:'+(isActive?"#fff":"#6B7280")+';border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700">'+count+'</span>'
+      +'</button>';
+  }).join("");
+
+  var cards=filtered.map(function(s){
+    var col=deptColor(s.dept);
+    var icon=deptIcon(s.dept);
+    return '<div class="sub-card">'
+      +'<div class="sub-card-inner">'
+        +'<div class="sub-dept-bar" style="background:'+col+'"></div>'
+        +'<div class="sub-main">'
+          +'<div class="sub-id-col">'
+            +'<div class="sub-token">'+s.id+'</div>'
+            +'<div class="sub-dept-tag" style="background:'+col+'14;color:'+col+'">'+icon+' '+s.dept+'</div>'
+            +'<div class="sub-team">'+s.team+'</div>'
+          +'</div>'
+          +'<div class="sub-center">'
+            +'<div class="sub-proj">'+s.proj+'</div>'
+            +'<div class="sub-desc">'+s.desc.slice(0,110)+'...</div>'
+            +'<div class="sub-date">📅 '+s.date+' &nbsp;·&nbsp; '+s.time+'</div>'
+          +'</div>'
+          +'<div class="sub-right-col">'
+            +pillHtml(s.status)
+            +'<button class="btn-review" onclick="openDrawer(\''+s.id+'\')">Open Review</button>'
+          +'</div>'
+        +'</div>'
+      +'</div>'
+    +'</div>';
+  }).join("");
+
+  c.innerHTML=
+    '<div class="pg-header"><div class="pg-title">Submissions</div><div class="pg-sub">Review, approve and manage all project submissions</div></div>'
+    +'<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">'+tabHtml+'</div>'
+    +'<div class="subs-toolbar">'
+      +'<div class="search-box"><span class="search-icon">🔍</span><input id="si" value="'+SEARCH+'" placeholder="Search by team, project or token..." oninput="SEARCH=this.value;subsPage(document.getElementById(\'content\'))"></div>'
+      +'<div class="sel-wrap"><select onchange="SORT=this.value===\'Newest First\'?\'Newest\':\'Oldest\';subsPage(document.getElementById(\'content\'))"><option>Newest First</option><option>Oldest First</option></select></div>'
+      +'<div class="count-chip">'+filtered.length+' of '+DATA.length+' submissions</div>'
+    +'</div>'
+    +'<div class="sub-list">'+cards+'</div>';
+}
+
+/* ══════════════ PUBLISHED PAGE ══════════════ */
+function pubPage(c){
+  var pub=DATA.filter(function(s){return s.status==="Published";});
+  var cards=pub.map(function(s){
+    var col=deptColor(s.dept);
+    var icon=deptIcon(s.dept);
+    return '<div class="pub-card">'
+      +'<div class="pub-banner" style="background:'+col+'18;color:'+col+'">'
+        +'<span style="font-size:36px">'+icon+'</span>'
+        +'<span class="pub-live-badge">● LIVE</span>'
+      +'</div>'
+      +'<div class="pub-body">'
+        +'<div class="pub-title">'+s.proj+'</div>'
+        +'<div class="pub-meta">'+s.team+' &bull; '+s.dept+'<br>Published: '+s.date+'</div>'
+        +'<div class="pub-actions">'
+          +'<button class="btn-view-live" onclick="showToast(\'Opening live project...\',\'i\')">🚀 View Live</button>'
+          +'<button class="btn-unpublish" onclick="unpublish(\''+s.id+'\')">Unpublish</button>'
+        +'</div>'
+      +'</div>'
+    +'</div>';
+  }).join("");
+  c.innerHTML='<div class="pg-header"><div class="pg-title">Published Projects</div><div class="pg-sub">'+pub.length+' projects currently live and accessible</div></div><div class="pub-grid">'+cards+'</div>';
+}
+function unpublish(id){
+  DATA.forEach(function(s,i){if(s.id===id)DATA[i].status="Pending";});
+  updateBadge();showToast("Project unpublished and moved to Pending.","i");
+  pubPage(document.getElementById("content"));
+}
+
+/* ══════════════ SETTINGS PAGE ══════════════ */
+function settingsPage(c){
+  var rows=[["Admin Name","Admin User"],["Email","admin@internal.corp"],["Role","Administrator"],["Portal Version","v2.4.1"]].map(function(r){
+    return '<div class="setting-row"><span class="setting-label">'+r[0]+'</span><span class="setting-val">'+r[1]+'</span></div>';
+  }).join("");
+  c.innerHTML='<div class="pg-header"><div class="pg-title">Settings</div><div class="pg-sub">Manage your admin account and portal preferences</div></div>'
+    +'<div class="settings-card">'
+      +'<div class="settings-head"><div class="settings-head-icon">⚙️</div><div><div class="settings-head-title">Admin Account</div><div class="settings-head-sub">Your portal credentials and info</div></div></div>'
+      +rows
+    +'</div>';
+}
+
+/* ══════════════ REVIEW DRAWER ══════════════ */
+function openDrawer(id){
+  DR_SUB=DATA.find(function(s){return s.id===id;});
+  DR_TAB=0;
+  DR_CHK=[false,false,false,false,false];
+  renderDrawer();
+}
+function closeDrawer(){DR_SUB=null;document.getElementById("drawer-root").innerHTML="";}
+function switchTab(t){DR_TAB=t;renderDrawer();}
+function toggleChk(i){DR_CHK[i]=!DR_CHK[i];renderDrawer();}
+
+function renderDrawer(){
+  if(!DR_SUB){document.getElementById("drawer-root").innerHTML="";return;}
+  var s=DR_SUB;
+  var col=deptColor(s.dept);
+  var icon=deptIcon(s.dept);
+  var allChecked=DR_CHK.every(Boolean);
+  var canPub=allChecked&&s.status==="Pending";
+  var checkedCount=DR_CHK.filter(Boolean).length;
+  var pct=Math.round((checkedCount/5)*100);
+
+  /* Tab body */
+  var tabBody="";
+  if(DR_TAB===0){
+    var flds=[["Team",s.team],["Team Lead",s.lead],["Department",s.dept],["Email",s.email],["Project Code",s.code],["Category",s.cat],["Start Date",s.start],["End Date",s.end]];
+    tabBody='<div class="field-grid">'+flds.map(function(f){return '<div class="f-box"><div class="f-label">'+f[0]+'</div><div class="f-val">'+f[1]+'</div></div>';}).join("")+'</div>'
+      +'<div class="f-section-label">Description</div>'
+      +'<div class="desc-box">'+s.desc+'</div>'
+      +'<div class="f-section-label">Milestones</div>'
+      +s.ms.map(function(m){return '<div class="ms-item"><span>📌 '+m.n+'</span><span class="ms-date">'+m.d+'</span></div>';}).join("")
+      +'<div class="f-section-label">Tech Stack</div>'
+      +'<div class="tag-wrap">'+s.tech.map(function(t){return '<span class="tech-tag">'+t+'</span>';}).join("")+'</div>';
+  } else if(DR_TAB===1){
+    tabBody='<div class="f-section-label">Project Banner</div>'
+      +'<div class="banner-preview" style="background:'+col+'12;color:'+col+'"><span style="font-size:48px">'+icon+'</span></div>'
+      +'<div class="f-section-label">Uploaded Documents</div>'
+      +[{n:"Project_Brief.pdf",s:"245 KB",i:"📄"},{n:"Technical_Spec.docx",s:"128 KB",i:"📝"},{n:"Architecture_Diagram.pdf",s:"1.2 MB",i:"📊"}].map(function(f){
+        return '<div class="file-item"><span class="file-icon">'+f.i+'</span><span class="file-name">'+f.n+'</span><span class="file-size">'+f.s+'</span><button class="file-dl" onclick="showToast(\'Downloading '+f.n+'...\',\'i\')">↓ Download</button></div>';
+      }).join("");
+  } else {
+    var chkLabels=["Team identity verified","Project details complete and accurate","All required files uploaded and valid","No duplicate submission from this team","Content approved for internal publication"];
+    tabBody='<div class="val-progress"><div class="val-prog-label"><span>Validation Progress</span><span style="color:#22C55E;font-weight:700">'+checkedCount+'/5 checks</span></div><div class="val-prog-bar"><div class="val-prog-fill" style="width:'+pct+'%"></div></div></div>'
+      +'<div class="val-hint">💡 Complete all 5 checks below to unlock the Publish button.</div>'
+      +chkLabels.map(function(lbl,i){
+        var on=DR_CHK[i];
+        return '<div class="chk-row'+(on?" checked":"")+'" onclick="toggleChk('+i+')">'
+          +'<div class="chk-box'+(on?" checked":"")+'">'+(on?'<span style="color:#fff;font-size:13px;font-weight:800">✓</span>':"")+'</div>'
+          +'<span class="chk-lbl'+(on?" checked":"")+'">'+lbl+'</span>'
+          +'</div>';
+      }).join("");
+  }
+
+  var tabs=["Project Info","Files & Assets","Validation"].map(function(t,i){
+    return '<button class="dr-tab'+(DR_TAB===i?" active":"")+'" onclick="switchTab('+i+')">'+t+'</button>';
+  }).join("");
+
+  var footerNote=s.status==="Published"?'<div style="font-size:11px;color:#6B7280;text-align:center;padding:8px 20px;border-top:1px solid #f0f2f8">This project is already <span style="color:#22C55E;font-weight:700">Published</span></div>'
+    :s.status==="Rejected"?'<div style="font-size:11px;color:#6B7280;text-align:center;padding:8px 20px;border-top:1px solid #f0f2f8">This project was <span style="color:#EF4444;font-weight:700">Rejected</span></div>'
+    :'';
+
+  document.getElementById("drawer-root").innerHTML=
+    '<div class="overlay" onclick="if(event.target===this)closeDrawer()">'
+      +'<div class="drawer">'
+
+        /* header */
+        +'<div class="dr-header">'
+          +'<div class="dr-header-left">'
+            +'<div class="dr-token">'+s.id+'</div>'
+            +'<div class="dr-title">'+s.proj+'</div>'
+            +'<div class="dr-team">'+s.team+' &nbsp;·&nbsp; Submitted '+s.date+'</div>'
+          +'</div>'
+          +'<button class="dr-close" onclick="closeDrawer()">✕</button>'
+        +'</div>'
+
+        /* dept + status bar */
+        +'<div class="dr-statusbar">'
+          +'<span class="dr-dept-chip" style="background:'+col+'20;color:'+col+'">'+icon+' '+s.dept+'</span>'
+          +'<span style="font-size:11px;color:rgba(255,255,255,0.3);font-weight:500">'+s.cat+'</span>'
+          +'<div class="dr-current-status">Current Status: '+pillHtml(s.status)+'</div>'
+        +'</div>'
+
+        /* tabs */
+        +'<div class="dr-tabs">'+tabs+'</div>'
+
+        /* body */
+        +'<div class="dr-body">'+tabBody+'</div>'
+
+        /* footer action bar */
+        +'<div class="dr-footer">'
+          +'<div class="dr-footer-top">'
+            +'<button class="btn-publish-big '+(canPub?"pub-enabled":"pub-disabled")+'" '+(canPub?"":"disabled")
+              +' onclick="'+(canPub?"publishSub(\'"+s.id+"\')":'showToast("Complete all 5 validation checks first to unlock publish","i")')+'">'
+              +'<span class="btn-icon">🚀</span>'
+              +'<span class="btn-main-lbl">PUBLISH</span>'
+              +'<span class="btn-sub-lbl">'+(canPub?"Ready to go live":"Complete validation first")+'</span>'
+            +'</button>'
+            +'<button class="btn-action-sm btn-reject-action" onclick="showRejectModal(\''+s.id+'\')">'
+              +'<span class="btn-icon">❌</span>'
+              +'<span class="btn-action-lbl">REJECT</span>'
+            +'</button>'
+            +'<button class="btn-action-sm btn-changes-action" onclick="showChangesModal(\''+s.id+'\')">'
+              +'<span class="btn-icon">📝</span>'
+              +'<span class="btn-action-lbl">CHANGES</span>'
+            +'</button>'
+          +'</div>'
+          +footerNote
+        +'</div>'
+
+      +'</div>'
+    +'</div>';
+}
+
+function publishSub(id){
+  DATA.forEach(function(s,i){if(s.id===id)DATA[i].status="Published";});
+  updateBadge();showToast("🎉 Project published successfully and is now live!","s");
+  closeDrawer();render();
+}
+
+function showRejectModal(id){
+  document.getElementById("modal-root").innerHTML=
+    '<div class="modal-bg" onclick="if(event.target===this)closeModal()">'
+      +'<div class="modal">'
+        +'<span class="modal-icon">❌</span>'
+        +'<div class="modal-title">Reject Submission</div>'
+        +'<div class="modal-sub">Please provide a clear reason for rejection. This will be shared with the team for revision.</div>'
+        +'<textarea id="modal-txt" rows="4" placeholder="Enter rejection reason..."></textarea>'
+        +'<div class="modal-actions">'
+          +'<button class="modal-confirm" style="background:#EF4444" onclick="confirmReject(\''+id+'\')">Confirm Reject</button>'
+          +'<button class="modal-cancel" onclick="closeModal()">Cancel</button>'
+        +'</div>'
+      +'</div>'
+    +'</div>';
+}
+
+function confirmReject(id){
+  DATA.forEach(function(s,i){if(s.id===id)DATA[i].status="Rejected";});
+  updateBadge();showToast("Submission rejected successfully.","e");
+  closeModal();closeDrawer();render();
+}
+
+function showChangesModal(id){
+  document.getElementById("modal-root").innerHTML=
+    '<div class="modal-bg" onclick="if(event.target===this)closeModal()">'
+      +'<div class="modal">'
+        +'<span class="modal-icon">📝</span>'
+        +'<div class="modal-title">Request Changes</div>'
+        +'<div class="modal-sub">Describe the changes required. The team will receive your feedback and can resubmit.</div>'
+        +'<textarea id="modal-txt" rows="4" placeholder="Describe what needs to be updated or revised..."></textarea>'
+        +'<div class="modal-actions">'
+          +'<button class="modal-confirm" style="background:#FF6B2B" onclick="confirmChanges(\''+id+'\')">Send Request</button>'
+          +'<button class="modal-cancel" onclick="closeModal()">Cancel</button>'
+        +'</div>'
+      +'</div>'
+    +'</div>';
+}
+
+function confirmChanges(id){
+  showToast("Change request sent to the team successfully.","i");
+  closeModal();
+}
+
+function closeModal(){document.getElementById("modal-root").innerHTML="";}
+
+/* ══════════════ INIT ══════════════ */
+updateBadge();
+dashPage(document.getElementById("content"));
+</script>
+</body>
+</html>

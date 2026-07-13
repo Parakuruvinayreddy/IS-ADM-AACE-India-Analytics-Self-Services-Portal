@@ -1,0 +1,658 @@
+const Icon = ({ path, className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} dangerouslySetInnerHTML={{ __html: path }}></svg>
+);
+
+const icons = {
+    trending: '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline>',
+    database: '<ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>',
+    cpu: '<rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line>',
+    barChart: '<path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path>',
+    chevronLeft: '<polyline points="15 18 9 12 15 6"></polyline>',
+    chevronRight: '<polyline points="9 18 15 12 9 6"></polyline>',
+    info: '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line>',
+    mail: '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline>',
+    ticket: '<path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2z"></path><line x1="13" y1="5" x2="13" y2="21"></line>',
+    lightbulb: '<path d="M9 21h6"></path><path d="M9 18h6"></path><path d="M10 15H14C14.7956 15 15.5587 14.6839 16.1213 14.1213C16.6839 13.5587 17 12.7956 17 12C17 10.14 15.5 8.5 13.5 8C13.5 5.5 11.5 4 9.5 4C7.5 4 6 5.5 6 7.5C6 8.5 6.5 9.5 7.5 10C8.5 10.5 9 11.5 9 12.5V15Z"></path>',
+    message: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>',
+    x: '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>',
+    lock: '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>',
+    activity: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>',
+    search: '<circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>',
+    server: '<rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line>',
+    download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line>',
+    fileText: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline>'
+};
+
+const NEWS_ITEMS = [
+    { category: "AI NEWS", title: "GenAI 2.0 Deployment", desc: "Our internal LLM now supports multi-modal data processing for Supply Chain automation.", date: "Jan 10, 2026" },
+    { category: "PROJECT NEWS", title: "Finance Dashboard Launch", desc: "Successful transition to the automated Spend Intelligence platform across all regions.", date: "Jan 08, 2026" },
+    { category: "AI NEWS", title: "Predictive Logistics", desc: "New AI model reduces fuel costs by 12% using real-time traffic and weather telemetry.", date: "Jan 05, 2026" },
+    { category: "PROJECT NEWS", title: "Data Lake Expansion", desc: "Marketing attribution data from APAC is now fully integrated into the global lake.", date: "Dec 28, 2025" },
+    { category: "AI NEWS", title: "Agentic Workflows", desc: "Pilot program initiated for AI agents to automate routine IT helpdesk ticket resolutions.", date: "Dec 20, 2025" },
+    { category: "AI NEWS", title: "Natural Language SQL", desc: "Business users can now query internal databases using plain English via the ADM Chatbot.", date: "Dec 10, 2025" }
+];
+
+const BU_DATA = {
+    finance: { label: "Finance", projects: [{ name: "EH Dashboard", source: "SAP", owner: "Venu" }, { name: "PFO Dashboard", source: "TED", owner: "Venu" }] },
+    supply_chain: { label: "Supply Chain", projects: [{ name: "Inventory Optimizer", source: "SAP IBP", owner: "TBD" }, { name: "Route Tracking", source: "IoT Sensors", owner: "TBD" }] },
+    marketing: { label: "Marketing", projects: [{ name: "Customer LTV", source: "Salesforce", owner: "TDB" }, { name: "Attribution", source: "Google Ads", owner: "NA" }] },
+    hr: { label: "Sales", projects: [{ name: "EETC", source: "EDGE", owner: "Jeniffer" }, { name: "Booking Prediction", source: "EDGE", owner: "Jeniffer" }] }
+};
+
+const StatsRow = () => {
+    return (
+        <div className="max-w-7xl mx-auto px-6 -mt-10 mb-20 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                    { label: "Active Projects", value: "0", icon: icons.activity },
+                    { label: "Data Pipelines", value: "0", icon: icons.database },
+                    { label: "ML Models", value: "0", icon: icons.cpu },
+                    { label: "Uptime", value: "0", icon: icons.server }
+                ].map((stat, idx) => (
+                    <div key={idx} className="bg-gradient-to-br from-gray-200 to-gray-300 rounded-3xl p-6 shadow-xl border border-white/50 backdrop-blur-md flex items-center gap-6 group hover:-translate-y-1 transition-transform duration-300">
+                        <div className="w-14 h-14 bg-adm rounded-2xl flex items-center justify-center text-white shadow-lg shrink-0 group-hover:bg-orange-500 transition-colors duration-300">
+                            <Icon path={stat.icon} className="w-7 h-7" />
+                        </div>
+                        <div>
+                            <div className="text-3xl font-black text-adm mb-1 tracking-tight group-hover:text-adm/80 transition-colors">{stat.value}</div>
+                            <div className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-500">{stat.label}</div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const ChatBot = () => {
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [messages, setMessages] = React.useState([]);
+    const [inputValue, setInputValue] = React.useState("");
+
+    const toggleChat = () => {
+        if (!isOpen) {
+            setIsOpen(true);
+            if (messages.length === 0) setTimeout(() => setMessages([{ text: "Hi! How can I help you?", sender: "bot" }]), 500);
+        } else setIsOpen(false);
+    };
+
+    const handleSend = () => {
+        if (!inputValue.trim()) return;
+        setMessages([...messages, { text: inputValue, sender: 'user' }]);
+        setInputValue("");
+        setTimeout(() => setMessages(prev => [...prev, { text: "I'm a demo bot. I can't really answer that yet!", sender: 'bot' }]), 1000);
+    };
+
+    return (
+        <div className="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-6">
+            {isOpen && (
+                <div className="w-[22rem] h-[32rem] bg-white/80 backdrop-blur-2xl rounded-[2rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.2)] border border-white/40 flex flex-col overflow-hidden animate-slideUp origin-bottom-right">
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-adm to-adm-light p-6 rounded-t-[2rem] shadow-lg relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
+                        <div className="flex justify-between items-center relative z-10">
+                            <div>
+                                <h3 className="font-black text-white uppercase tracking-widest text-sm flex items-center gap-2">
+                                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(74,222,128,0.5)]"></div>
+                                    ADM Assistant
+                                </h3>
+                                <p className="text-white/60 text-[10px] uppercase tracking-wider mt-1 font-medium">Online</p>
+                            </div>
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all"
+                            >
+                                <Icon path={icons.x} className="w-4 h-4 text-white" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Messages */}
+                    <div className="flex-1 p-5 overflow-y-auto space-y-4 bg-gray-50/50 scrollbar-hide">
+                        {messages.map((msg, idx) => (
+                            <div key={idx} className={`flex ${msg.sender === 'bot' ? 'justify-start' : 'justify-end'}`}>
+                                <div className={`max-w-[85%] p-4 rounded-2xl text-xs font-bold leading-relaxed shadow-sm animate-fadeIn ${msg.sender === 'bot'
+                                    ? 'bg-white text-gray-700 rounded-tl-none border border-gray-100'
+                                    : 'bg-gradient-to-br from-orange-400 to-orange-600 text-white rounded-tr-none shadow-orange-200'
+                                    }`}>
+                                    {msg.text}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Input */}
+                    <div className="p-4 bg-white/50 backdrop-blur-sm border-t border-white/20">
+                        <div className="flex gap-2 bg-white p-1.5 pl-5 rounded-full border border-gray-100 shadow-sm focus-within:border-orange-500/50 focus-within:shadow-orange-100 transition-all">
+                            <input
+                                type="text"
+                                value={inputValue}
+                                onChange={(e) => setInputValue(e.target.value)}
+                                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                                placeholder="Type your message..."
+                                className="flex-1 text-xs font-semibold text-gray-700 outline-none bg-transparent placeholder:text-gray-400"
+                            />
+                            <button
+                                onClick={handleSend}
+                                className="w-9 h-9 bg-adm text-white rounded-full flex items-center justify-center hover:bg-orange-500 transition-colors shadow-md"
+                            >
+                                <Icon path={icons.chevronRight} className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <button
+                onClick={toggleChat}
+                className={`group relative w-16 h-16 rounded-full shadow-[0_10px_40px_-10px_rgba(249,115,22,0.6)] flex items-center justify-center text-white transition-all duration-300 hover:scale-110 z-[100] ${isOpen ? 'bg-adm rotate-90' : 'bg-gradient-to-br from-orange-400 to-orange-600'
+                    }`}
+            >
+                {/* Pulse Ring */}
+                {!isOpen && <div className="absolute inset-0 rounded-full bg-orange-500 animate-[ping_2s_ease-in-out_infinite] opacity-20"></div>}
+                <Icon path={isOpen ? icons.x : icons.message} className="w-7 h-7" />
+            </button>
+        </div>
+    );
+};
+
+const NewsCarousel = () => {
+    const [current, setCurrent] = React.useState(0);
+    React.useEffect(() => {
+        const timer = setInterval(() => setCurrent((prev) => (prev + 1) % NEWS_ITEMS.length), 6000);
+        return () => clearInterval(timer);
+    }, []);
+    return (
+        <div className="-mt-8 mb-20 relative bg-adm text-white py-24 overflow-hidden border border-white/10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] mx-4 lg:mx-8 rounded-[3rem]">
+            {/* Background Texture/Glow - Subtle enhancement within same color palette */}
+            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.05),transparent_40%)] pointer-events-none"></div>
+
+            <div className="max-w-6xl mx-auto px-6 relative min-h-[240px] flex items-center justify-center">
+                {/* Left Arrow */}
+                <button onClick={() => setCurrent(current === 0 ? NEWS_ITEMS.length - 1 : current - 1)} className="absolute left-0 p-4 rounded-full hover:bg-white/5 transition-all group z-20">
+                    <Icon path={icons.chevronLeft} className="w-12 h-12 text-white/20 group-hover:text-orange-500 transition-colors" />
+                </button>
+
+                {/* Content */}
+                <div key={current} className="text-center animate-fadeIn max-w-4xl mx-auto z-10">
+                    <div className="mb-8 flex justify-center">
+                        <span className="inline-block border border-orange-500/50 text-orange-500 text-[10px] font-black px-4 py-1.5 rounded-full tracking-[0.25em] uppercase bg-orange-500/5 backdrop-blur-sm">
+                            {NEWS_ITEMS[current].category}
+                        </span>
+                    </div>
+                    <h2 className="text-4xl md:text-6xl font-black mb-8 uppercase tracking-tighter leading-none bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+                        {NEWS_ITEMS[current].title}
+                    </h2>
+                    <p className="text-gray-300 text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto">
+                        {NEWS_ITEMS[current].desc}
+                    </p>
+                    <div className="mt-10 flex items-center justify-center gap-6 opacity-60">
+                        <div className="h-px w-12 bg-gradient-to-r from-transparent to-orange-500"></div>
+                        <span className="text-orange-500 text-xs font-black tracking-[0.2em] uppercase">{NEWS_ITEMS[current].date}</span>
+                        <div className="h-px w-12 bg-gradient-to-l from-transparent to-orange-500"></div>
+                    </div>
+                </div>
+
+                {/* Right Arrow */}
+                <button onClick={() => setCurrent((current + 1) % NEWS_ITEMS.length)} className="absolute right-0 p-4 rounded-full hover:bg-white/5 transition-all group z-20">
+                    <Icon path={icons.chevronRight} className="w-12 h-12 text-white/20 group-hover:text-orange-500 transition-colors" />
+                </button>
+            </div>
+
+            {/* Pagination Dots */}
+            <div className="flex justify-center gap-3 mt-14">
+                {NEWS_ITEMS.map((_, i) => (
+                    <button
+                        key={i}
+                        onClick={() => setCurrent(i)}
+                        className={`transition-all duration-500 rounded-full h-1.5 ${current === i ? 'w-12 bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.5)]' : 'w-2 bg-white/20 hover:bg-white/40'}`}
+                    ></button>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const BUSector = () => {
+    const [selectedBU, setSelectedBU] = React.useState(null);
+    const [expandedProj, setExpandedProj] = React.useState(null);
+    const containerRef = React.useRef(null);
+
+    React.useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (containerRef.current && !containerRef.current.contains(e.target)) {
+                setSelectedBU(null);
+                setExpandedProj(null);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const toggleProject = (idx) => {
+        setExpandedProj(expandedProj === idx ? null : idx);
+    };
+
+    return (
+        <section id="discovery" className="py-24 bg-gray-50 scroll-mt-20">
+            <div ref={containerRef} className="max-w-7xl mx-auto px-6">
+                <div className="text-center mb-16">
+                    <h2 className="text-3xl font-black text-adm uppercase tracking-widest">Projects by Functions</h2>
+                    <div className="w-16 h-1 bg-orange-500 mx-auto mt-4 mb-4"></div>
+                </div>
+
+                {/* Modern Tabs */}
+                {/* Premium Project Cards */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16 max-w-6xl mx-auto">
+                    {Object.entries(BU_DATA).map(([key, bu]) => (
+                        <button
+                            key={key}
+                            onClick={() => { setSelectedBU(key); setExpandedProj(null); }}
+                            className={`group relative h-32 rounded-[2rem] border transition-all duration-500 flex flex-col items-center justify-center gap-4 overflow-hidden ${selectedBU === key
+                                ? 'bg-adm border-orange-500 shadow-[0_20px_50px_-12px_rgba(23,37,84,0.5)] scale-105 z-10'
+                                : 'bg-white border-gray-100 hover:border-orange-300 hover:shadow-xl hover:-translate-y-1'
+                                }`}
+                        >
+                            {/* Decorative Background for Active */}
+                            {selectedBU === key && (
+                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.15),transparent_60%)]"></div>
+                            )}
+
+                            {/* Label */}
+                            <span className={`text-sm md:text-base font-black uppercase tracking-[0.2em] z-10 transition-colors duration-300 ${selectedBU === key ? 'text-white' : 'text-gray-400 group-hover:text-adm'}`}>
+                                {bu.label}
+                            </span>
+
+                            {/* Indicator Line */}
+                            <div className={`h-1 rounded-full transition-all duration-500 z-10 ${selectedBU === key ? 'w-12 bg-orange-500' : 'w-2 bg-gray-200 group-hover:w-8 group-hover:bg-orange-300'
+                                }`}></div>
+                        </button>
+                    ))}
+                </div>
+
+                {selectedBU && (
+                    <div className="bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 max-w-4xl mx-auto animate-fadeIn border border-gray-100 relative z-40">
+                        <div className="flex justify-between items-center mb-10 border-b border-gray-100 pb-6">
+                            <h3 className="text-3xl font-black text-adm uppercase tracking-tight">{BU_DATA[selectedBU].label} Projects</h3>
+                            <button onClick={() => { setSelectedBU(null); setExpandedProj(null); }} className="text-gray-300 hover:text-orange-500 font-bold transition-colors">
+                                <Icon path={icons.x} className="w-6 h-6" />
+                            </button>
+                        </div>
+                        <ul className="space-y-6">
+                            {BU_DATA[selectedBU].projects.map((proj, idx) => (
+                                <li key={idx} className={`rounded-2xl border transition-all duration-500 overflow-hidden ${expandedProj === idx ? 'bg-gray-50 border-orange-500/30 ring-4 ring-orange-500/5' : 'bg-white border-gray-100 hover:border-gray-200 hover:shadow-lg'}`}>
+                                    <div
+                                        className="flex items-center justify-between p-6 cursor-pointer"
+                                        onClick={() => toggleProject(idx)}
+                                    >
+                                        <span className={`font-black uppercase tracking-tight transition-colors ${expandedProj === idx ? 'text-orange-500' : 'text-adm'}`}>{proj.name}</span>
+                                        <div className="flex items-center gap-4">
+                                            <span className={`text-orange-500 font-black transform transition-transform duration-300 ${expandedProj === idx ? 'rotate-180' : ''}`}>▼</span>
+                                        </div>
+                                    </div>
+
+                                    {expandedProj === idx && (
+                                        <div className="px-6 pb-8 pt-2 animate-fadeIn">
+                                            {/* Details Grid */}
+                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                                                <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                                                    <p className="text-[9px] font-black text-gray-400 uppercase mb-2 tracking-widest">Data Source</p>
+                                                    <p className="text-sm font-bold text-adm">{proj.source}</p>
+                                                </div>
+                                                <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                                                    <p className="text-[9px] font-black text-gray-400 uppercase mb-2 tracking-widest">Owner</p>
+                                                    <p className="text-sm font-bold text-adm">{proj.owner}</p>
+                                                </div>
+                                                <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm hidden md:block">
+                                                    <p className="text-[9px] font-black text-gray-400 uppercase mb-2 tracking-widest">Status</p>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                                        <span className="text-sm font-bold text-adm">Active</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Action Buttons - New! */}
+                                            <div className="flex flex-wrap gap-3 pt-6 border-t border-gray-200/50">
+                                                <a href="#" className="flex items-center gap-2 bg-adm text-white px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-adm-light transition-all shadow-md hover:-translate-y-0.5">
+                                                    <Icon path={icons.barChart} className="w-3 h-3" /> Dashboard
+                                                </a>
+                                                <div className="h-full w-px bg-gray-300 mx-2 hidden sm:block"></div>
+                                                <a href="#" className="flex items-center gap-2 bg-white text-gray-600 border border-gray-200 px-5 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:text-orange-500 hover:border-orange-500 transition-all shadow-sm hover:-translate-y-0.5">
+                                                    <Icon path={icons.fileText} className="w-3 h-3" /> Document
+                                                </a>
+                                                <a href="#" className="flex items-center gap-2 bg-white text-gray-600 border border-gray-200 px-5 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:text-orange-500 hover:border-orange-500 transition-all shadow-sm hover:-translate-y-0.5">
+                                                    <Icon path={icons.download} className="w-3 h-3" /> Data
+                                                </a>
+                                            </div>
+                                        </div>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </div>
+        </section>
+    );
+};
+
+const IAMRequestPage = ({ setCurrentView }) => {
+    return (
+        <section className="min-h-screen pt-20 pb-20 bg-gray-50 flex items-center justify-center relative overflow-hidden">
+            {/* Background Decoration */}
+            <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-adm to-transparent pointer-events-none"></div>
+
+            {/* Back Button */}
+            <button
+                onClick={() => setCurrentView('home')}
+                className="fixed top-8 left-8 z-50 flex items-center gap-2 bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-full hover:bg-white/20 transition-all shadow-lg border border-white/20"
+            >
+                <Icon path={icons.chevronLeft} className="w-4 h-4" />
+                <span className="font-black text-xs uppercase tracking-widest">Back to Home</span>
+            </button>
+
+            <div className="max-w-4xl w-full mx-6 relative z-10">
+                <div className="text-center mb-12">
+                    <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">Request Access</h2>
+                    <p className="text-white/60 text-lg tracking-widest uppercase font-medium">Secure Data & Dashboard Provisioning</p>
+                </div>
+
+                <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border border-gray-100 animate-slideUp">
+                    <form className="space-y-10" onSubmit={(e) => e.preventDefault()}>
+
+                        {/* Section 1: User Identity */}
+                        <div className="space-y-6">
+                            <h3 className="flex items-center gap-3 text-xl font-black text-adm uppercase tracking-widest border-b border-gray-100 pb-4">
+                                <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white"><Icon path={icons.user} className="w-4 h-4" /></div>
+                                Identity Verification
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">TE User ID</label>
+                                    <input type="text" placeholder="e.g. TE123456" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 font-bold text-adm outline-none focus:border-orange-500 focus:bg-white transition-all shadow-sm" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Location / Site</label>
+                                    <input type="text" placeholder="e.g. Schaffhausen, CH" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 font-bold text-adm outline-none focus:border-orange-500 focus:bg-white transition-all shadow-sm" />
+                                </div>
+                                <div className="space-y-2 md:col-span-2">
+                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Corporate Email</label>
+                                    <input type="email" placeholder="first.last@te.com" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 font-bold text-adm outline-none focus:border-orange-500 focus:bg-white transition-all shadow-sm" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Section 2: Access Scope */}
+                        <div className="space-y-6">
+                            <h3 className="flex items-center gap-3 text-xl font-black text-adm uppercase tracking-widest border-b border-gray-100 pb-4">
+                                <div className="w-8 h-8 rounded-full bg-adm flex items-center justify-center text-white"><Icon path={icons.lock} className="w-4 h-4" /></div>
+                                Access Scope
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div className="space-y-2 md:col-span-1">
+                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Resource Type</label>
+                                    <div className="relative">
+                                        <select className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 font-bold text-adm outline-none focus:border-orange-500 focus:bg-white transition-all shadow-sm appearance-none cursor-pointer">
+                                            <option>Dashboard</option>
+                                            <option>Data Pipeline</option>
+                                            <option>File System</option>
+                                            <option>API Key</option>
+                                        </select>
+                                        <div className="absolute right-5 top-1/2 -translate-y-1/2 text-orange-500 pointer-events-none">▼</div>
+                                    </div>
+                                </div>
+                                <div className="space-y-2 md:col-span-2">
+                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Specific Item Name</label>
+                                    <input type="text" placeholder="e.g. Global Supply Chain Q4 Dashboard" className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 font-bold text-adm outline-none focus:border-orange-500 focus:bg-white transition-all shadow-sm" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Section 3: Justification */}
+                        <div className="space-y-6">
+                            <h3 className="flex items-center gap-3 text-xl font-black text-adm uppercase tracking-widest border-b border-gray-100 pb-4">
+                                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-adm"><Icon path={icons.info} className="w-4 h-4" /></div>
+                                Business Justification
+                            </h3>
+                            <div className="space-y-2">
+                                <textarea rows="4" placeholder="Please explain why you need access to this resource..." className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 font-bold text-adm outline-none focus:border-orange-500 focus:bg-white transition-all shadow-sm resize-none"></textarea>
+                            </div>
+                        </div>
+
+                        {/* Submit Action */}
+                        <div className="pt-6 border-t border-gray-100 flex justify-end">
+                            <button className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-10 py-4 rounded-full font-black uppercase tracking-widest shadow-lg hover:shadow-orange-500/30 hover:-translate-y-1 transition-all duration-300 flex items-center gap-3">
+                                Submit Request <Icon path={icons.chevronRight} className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+const DocumentationPage = ({ setCurrentView }) => {
+    return (
+        <section className="min-h-screen pt-20 pb-20 bg-gray-50 relative overflow-hidden">
+            {/* Background Decoration */}
+            <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-adm to-transparent pointer-events-none"></div>
+
+            {/* Back Button */}
+            <button
+                onClick={() => setCurrentView('home')}
+                className="fixed top-8 left-8 z-50 flex items-center gap-2 bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-full hover:bg-white/20 transition-all shadow-lg border border-white/20"
+            >
+                <Icon path={icons.chevronLeft} className="w-4 h-4" />
+                <span className="font-black text-xs uppercase tracking-widest">Back to Home</span>
+            </button>
+
+            <div className="max-w-6xl w-full mx-auto px-6 relative z-10">
+                <div className="text-center mb-16 pt-8">
+                    <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">Documentation</h2>
+                    <p className="text-white/60 text-lg tracking-widest uppercase font-medium">Platform Guides & Resources</p>
+                </div>
+
+                {/* Documentation Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                    {[
+                        { title: "Getting Started", icon: icons.lightbulb, desc: "Quick start guide for new users", color: "orange" },
+                        { title: "API Reference", icon: icons.database, desc: "Complete API documentation", color: "adm" },
+                        { title: "Data Models", icon: icons.barChart, desc: "Understanding our data structures", color: "orange" },
+                        { title: "Security Guide", icon: icons.lock, desc: "Best practices for data security", color: "adm" },
+                        { title: "Integration", icon: icons.cpu, desc: "Connect external systems", color: "orange" },
+                        { title: "Support", icon: icons.mail, desc: "Contact our support team", color: "adm" }
+                    ].map((doc, idx) => (
+                        <div key={idx} className="group bg-white rounded-[2rem] p-8 shadow-lg border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer">
+                            <div className={`w-14 h-14 rounded-2xl ${doc.color === 'orange' ? 'bg-orange-500' : 'bg-adm'} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-md`}>
+                                <Icon path={doc.icon} className="w-7 h-7 text-white" />
+                            </div>
+                            <h3 className="text-xl font-black text-adm uppercase tracking-tight mb-3 group-hover:text-orange-500 transition-colors">{doc.title}</h3>
+                            <p className="text-gray-500 text-sm font-medium leading-relaxed">{doc.desc}</p>
+                            <div className="mt-6 flex items-center gap-2 text-orange-500 font-black text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                                View Docs <Icon path={icons.chevronRight} className="w-3 h-3" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Quick Links */}
+                <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-xl border border-gray-100">
+                    <h3 className="text-2xl font-black text-adm uppercase tracking-widest mb-8 border-b border-gray-100 pb-4">Quick Links</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {[
+                            { label: "Video Tutorials", link: "#" },
+                            { label: "FAQ", link: "#" },
+                            { label: "Release Notes", link: "#" },
+                            { label: "System Status", link: "#" },
+                            { label: "Training Materials", link: "#" },
+                            { label: "Community Forum", link: "#" }
+                        ].map((item, idx) => (
+                            <a key={idx} href={item.link} className="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-orange-500 hover:bg-orange-50 transition-all group">
+                                <span className="font-black text-sm uppercase tracking-wider text-adm group-hover:text-orange-500">{item.label}</span>
+                                <Icon path={icons.chevronRight} className="w-4 h-4 text-gray-300 group-hover:text-orange-500 transition-colors" />
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+const App = () => {
+    const [isScrolled, setIsScrolled] = React.useState(false);
+    const [isConnectOpen, setIsConnectOpen] = React.useState(false);
+    const [currentView, setCurrentView] = React.useState('home'); // 'home' | 'iam' | 'docs'
+    const connectRef = React.useRef(null);
+
+    React.useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    React.useEffect(() => {
+        const handleClickOutside = (e) => { if (connectRef.current && !connectRef.current.contains(e.target)) setIsConnectOpen(false); };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    // Scroll to top when view changes
+    React.useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [currentView]);
+
+    return (
+        <div className="min-h-screen">
+            {/* Dynamic Header - Hidden on IAM and Docs pages */}
+            {currentView === 'home' && (
+                <nav className={`fixed z-50 flex items-center justify-between transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) left-1/2 -translate-x-1/2
+                    ${isScrolled
+                        ? 'top-6 w-[95%] max-w-7xl h-20 rounded-full bg-adm/60 backdrop-blur-3xl shadow-[0_30px_60px_-12px_rgba(0,0,0,0.5)] border border-white/10 px-12'
+                        : 'top-0 w-full h-20 bg-adm border-b border-adm-light px-8'
+                    }`}>
+
+                    {/* Logo Section */}
+                    <a href="#" onClick={(e) => { e.preventDefault(); setCurrentView('home'); }} className="flex items-center gap-4 group shrink-0">
+                        <div className={`transition-all duration-500 ${isScrolled ? 'w-12 h-12' : 'w-16 h-16'}`}>
+                            <img src="https://www.te.com/_TEincludes/ver/1691/v2/images/te-connectivity-logo.svg" alt="Logo" className="w-full h-full object-contain" />
+                        </div>
+                        <span className={`font-black tracking-tighter uppercase transition-colors group-hover:text-orange-500 ${isScrolled ? 'text-2xl text-white' : 'text-3xl text-white'}`}>
+                            ADM <span className="text-orange-500 font-light tracking-widest group-hover:text-white transition-colors">ANALYTICS</span>
+                        </span>
+                    </a>
+
+                    {/* Center Navigation + Connect */}
+                    <div className={`flex items-center gap-2 transition-all duration-500 ${isScrolled ? 'bg-white/5 p-1.5 rounded-full border border-white/5 backdrop-blur-md' : ''}`}>
+                        {/* Standard Links */}
+                        {['DASHBOARD', 'PROJECTS', 'CAPABILITIES'].map((item, idx) => (
+                            <a key={item} href="#" onClick={(e) => { e.preventDefault(); setCurrentView('home'); }} className={`px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-[0.25em] transition-all duration-300 ${idx === 0 ? 'bg-orange-500 text-white shadow-lg transform hover:scale-105' : 'text-gray-300 hover:text-white hover:bg-white/10'}`}>
+                                {item}
+                            </a>
+                        ))}
+
+                        {/* Connect Dropdown - Persists! */}
+                        <div className="relative" ref={connectRef}>
+                            <button onClick={() => setIsConnectOpen(!isConnectOpen)} className="px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-[0.25em] text-white hover:bg-white/10 flex items-center gap-2 transition-all">
+                                CONNECT <span className={`transition-transform duration-300 text-orange-500 ${isConnectOpen ? 'rotate-180' : ''}`}>▼</span>
+                            </button>
+                            {isConnectOpen && (
+                                <div className="absolute top-full right-0 mt-4 w-72 bg-white/10 backdrop-blur-2xl rounded-2xl shadow-2xl py-2 border border-white/20 overflow-hidden text-white z-[60] animate-fadeIn">
+                                    <a href="mailto:support@adm-analytics.com" className="flex items-center gap-4 px-6 py-4 hover:bg-white/10 border-b border-white/10 group"><Icon path={icons.mail} className="w-5 h-5 text-orange-500 group-hover:scale-110 transition-transform" /><span className="font-bold text-xs uppercase tracking-widest">Email Us</span></a>
+                                    <a href="#" className="flex items-center gap-4 px-6 py-4 hover:bg-white/10 border-b border-white/10 group"><Icon path={icons.ticket} className="w-5 h-5 text-orange-500 group-hover:scale-110 transition-transform" /><span className="font-bold text-xs uppercase tracking-widest">Create Ticket</span></a>
+                                    <a href="#" className="flex items-center gap-4 px-6 py-4 hover:bg-white/10 group"><Icon path={icons.lightbulb} className="w-5 h-5 text-orange-500 group-hover:scale-110 transition-transform" /><span className="font-bold text-xs uppercase tracking-widest">Submit Idea</span></a>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Right Section - User Profile Only (No Search/System) */}
+                    <div className="flex items-center gap-4 shrink-0">
+                        <div className="text-right hidden xl:block animate-fadeIn">
+                            <div className="text-orange-400 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Welcome Back</div>
+                            <div className="text-white text-sm font-black leading-none uppercase tracking-widest">User Name</div>
+                        </div>
+                        <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white shadow-lg border-2 border-white/20 group cursor-pointer hover:scale-110 transition-transform">
+                            <Icon path={icons.user} className="w-6 h-6" />
+                        </div>
+                    </div>
+                </nav>
+            )}
+
+            {/* View Rendering */}
+            {currentView === 'home' ? (
+                <>
+                    {/* Spacer for fixed header overlap in Home view */}
+                    <div className="h-32"></div>
+                    <NewsCarousel />
+                    <StatsRow />
+                    <BUSector />
+                    <section id="capabilities" className="py-24 bg-white">
+                        <div className="max-w-7xl mx-auto px-6 text-center mb-16">
+                            <h2 className="text-3xl font-black text-adm uppercase tracking-widest">Strategic Pillars</h2>
+                            <div className="w-16 h-1 bg-orange-500 mx-auto mt-4"></div>
+                        </div>
+                        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                            {[
+                                { title: "Forecasting", icon: icons.trending, desc: "Predictive ML models for high-accuracy demand planning." },
+                                { title: "Architecture", icon: icons.database, desc: "Modern data fabric for seamless information flow." },
+                                { title: "Automation", icon: icons.cpu, desc: "Intelligent agents streamlining internal ops." },
+                                { title: "Insights", icon: icons.barChart, desc: "Executive dashboards with live KPI tracking." }
+                            ].map((cap, i) => (
+                                <div key={i} className="group relative bg-white rounded-[2.5rem] p-8 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] border border-gray-100 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(249,115,22,0.15)] hover:border-orange-500/30 overflow-hidden cursor-default">
+                                    {/* Hover Gradient Background */}
+                                    <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                                    {/* Icon Container */}
+                                    <div className="relative w-16 h-16 rounded-2xl bg-gray-50 text-adm flex items-center justify-center mb-8 group-hover:bg-orange-500 group-hover:text-white transition-all duration-500 shadow-sm group-hover:scale-110 group-hover:rotate-3">
+                                        <Icon path={cap.icon} className="w-8 h-8" />
+                                    </div>
+
+                                    <h3 className="relative text-lg font-black text-adm uppercase tracking-widest mb-4 group-hover:text-orange-500 transition-colors duration-300">
+                                        {cap.title}
+                                    </h3>
+                                    <p className="relative text-gray-500 text-sm font-medium leading-relaxed group-hover:text-gray-600">
+                                        {cap.desc}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                </>
+            ) : currentView === 'iam' ? (
+                <IAMRequestPage setCurrentView={setCurrentView} />
+            ) : (
+                <DocumentationPage setCurrentView={setCurrentView} />
+            )}
+
+            <footer className="relative bg-adm text-white py-24 overflow-hidden border-t-[12px] border-orange-500">
+                {/* Background Depth Gradient */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.03),transparent_70%)] pointer-events-none"></div>
+
+                <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col md:flex-row justify-between items-center gap-10">
+                    <div className="text-center md:text-left">
+                        <a href="#" onClick={(e) => { e.preventDefault(); setCurrentView('home'); }} className="group inline-block">
+                            <span className="font-black text-3xl uppercase italic tracking-tighter group-hover:text-orange-500 transition-colors">ADM <span className="text-orange-500 font-light tracking-[0.2em] group-hover:text-white transition-colors">ANALYTICS</span></span>
+                        </a>
+                        <p className="text-gray-500 text-[10px] mt-4 font-bold tracking-[0.3em] uppercase">© 2026 Strategy & Innovation Portal</p>
+                    </div>
+                    <div className="flex flex-wrap justify-center gap-12">
+                        <a href="#" onClick={(e) => { e.preventDefault(); setCurrentView('docs'); }} className="text-[11px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-orange-500 hover:-translate-y-1 transition-all duration-300">Documentation</a>
+                        <a href="#" onClick={(e) => { e.preventDefault(); setCurrentView('iam'); }} className="text-[11px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-orange-500 hover:-translate-y-1 transition-all duration-300">IAM Access</a>
+                        <a href="#" className="text-[11px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-orange-500 hover:-translate-y-1 transition-all duration-300">Global Support</a>
+                    </div>
+                </div>
+            </footer>
+            <ChatBot />
+        </div>
+    );
+};
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+

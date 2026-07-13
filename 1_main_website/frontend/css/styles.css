@@ -1,0 +1,117 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Hide scrollbar for auto-scrolling news */
+.hide-scrollbar {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari/Opera */
+}
+
+/* New Animations for 16:9 Hero */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slideInLeft {
+    animation: slideInLeft 0.6s ease-out forwards;
+}
+
+.animate-slideInRight {
+    animation: slideInRight 0.6s ease-out forwards;
+}
+
+.animate-fadeInUp {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* IMPROVED TOOLTIP CSS */
+.info-container {
+    position: relative;
+}
+
+.info-tooltip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    bottom: 120%;
+    /* Position above the icon */
+    right: 0;
+    width: 280px;
+    background-color: #1a2c3a;
+    /* adm-dark */
+    color: white;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    /* Ensure it's on top of EVERYTHING */
+    transition: all 0.2s ease-in-out;
+    pointer-events: none;
+    border-left: 4px solid #f97316;
+    /* orange-500 */
+}
+
+.info-container:hover .info-tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(-5px);
+}
+
+/* Triangle Pointer */
+.info-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    right: 10px;
+    border-width: 8px;
+    border-style: solid;
+    border-color: #1a2c3a transparent transparent transparent;
+}
+
+.carousel-slide {
+    transition: opacity 0.5s ease-in-out;
+}

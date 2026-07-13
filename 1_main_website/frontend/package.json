@@ -1,0 +1,16 @@
+{
+  "name": "adm-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for ADM Analytics Dashboard",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "cd adm-dashboard && npm install && npm run build",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

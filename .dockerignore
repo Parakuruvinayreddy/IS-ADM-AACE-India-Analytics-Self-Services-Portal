@@ -1,0 +1,85 @@
+# =============================================================================
+# .dockerignore — ADM Analytics Platform
+# =============================================================================
+# Applied when building Docker images from the project root.
+# Excludes files that are unnecessary inside containers, reducing
+# build context size and preventing sensitive data from leaking into images.
+# =============================================================================
+
+# ── Node.js Dependencies ────────────────────────────────────────────────────
+# Each Dockerfile installs its own dependencies via npm ci/install.
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── Build Output ────────────────────────────────────────────────────────────
+# Frontend builds are performed inside the Docker build stage.
+**/dist/
+**/build/
+**/out/
+**/build_output.log
+
+# ── Version Control ─────────────────────────────────────────────────────────
+.git/
+.gitignore
+
+# ── Environment & Secrets ───────────────────────────────────────────────────
+# NEVER bake secrets into images. Pass them at runtime via --env-file or -e.
+.env
+.env.*
+!.env.example
+!.env.docker.example
+
+# ── User Uploads & Storage ──────────────────────────────────────────────────
+# Runtime data — mount as volumes, never copy into images.
+**/uploads/
+storage/
+
+# ── Database Files ──────────────────────────────────────────────────────────
+# Exclude the local database directory entirely to avoid copying sqlite files
+database/
+*.db
+
+# ── Logs ────────────────────────────────────────────────────────────────────
+logs/
+*.log
+pids.txt
+nohup.out
+
+# ── Test & Coverage ─────────────────────────────────────────────────────────
+**/coverage/
+**/.nyc_output/
+
+# ── OS Files ────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE & Editor Files ──────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+*~
+
+# ── Agent & Tool Files ─────────────────────────────────────────────────────
+.gemini/
+.agents/
+
+# ── Miscellaneous ──────────────────────────────────────────────────────────
+*.pdf
+*.csv
+icons/
+scripts/
+nginx/
+start_all.ps1
+start_all.sh
+stop_all.sh
+ecosystem.config.js
+SYSTEM_DOCUMENTATION.md
+README.md
