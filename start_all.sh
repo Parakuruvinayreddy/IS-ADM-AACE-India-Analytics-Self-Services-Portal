@@ -137,25 +137,6 @@ fi
 echo ""
 
 # ============================================================
-#  STEP 2.5: Auto-create databases if they do not exist
-# ============================================================
-echo "[DB] Checking if required databases exist..."
-
-# Ensure is_adm_india schema exists in postgres database
-echo "[DB] Ensuring schema is_adm_india exists in postgres database..."
-PGPASSWORD="$PGPASSWORD" psql -U postgres -h localhost -d postgres -c "CREATE SCHEMA IF NOT EXISTS is_adm_india;" 2>&1
-
-# Run users_db schema (only creates tables IF NOT EXISTS) on is_adm_india schema
-echo "[DB] Applying users_db schema (IF NOT EXISTS) to is_adm_india schema..."
-if [ -f "$ROOT_DIR/database/schema_users.sql" ]; then
-  PGPASSWORD="$PGPASSWORD" PGOPTIONS="-c search_path=is_adm_india" psql -U postgres -h localhost -d postgres -f "$ROOT_DIR/database/schema_users.sql" 2>&1 | tail -3
-else
-  echo "  schema_users.sql not found — users table will be created by the auth module at startup."
-fi
-
-echo ""
-
-# ============================================================
 #  STEP 3: Build database connection URLs
 # ============================================================
 if [ -z "$DB_URL" ]; then
@@ -166,6 +147,25 @@ if [ -z "$DB_URL" ]; then
 fi
 
 echo "[DB] DB_URL = $DB_URL"
+echo ""
+
+# ============================================================
+#  STEP 2.5: Auto-create databases if they do not exist
+# ============================================================
+echo "[DB] Checking if required databases exist..."
+
+# Ensure is_adm_india schema exists
+echo "[DB] Ensuring schema is_adm_india exists..."
+psql -d "$DB_URL" -c "CREATE SCHEMA IF NOT EXISTS is_adm_india;" 2>&1
+
+# Run users_db schema (only creates tables IF NOT EXISTS)
+echo "[DB] Applying users_db schema (IF NOT EXISTS)..."
+if [ -f "$ROOT_DIR/database/schema_users.sql" ]; then
+  PGOPTIONS="-c search_path=is_adm_india" psql -d "$DB_URL" -f "$ROOT_DIR/database/schema_users.sql" 2>&1 | tail -3
+else
+  echo "  schema_users.sql not found — users table will be created by the auth module at startup."
+fi
+
 echo ""
 
 # ============================================================
