@@ -6,11 +6,14 @@ if (!process.env.DB_URL) {
   throw new Error('DB_URL environment variable is not set.');
 }
 
+const useSSL = !process.env.DB_URL.includes('localhost') && !process.env.DB_URL.includes('127.0.0.1');
+
 const pool = new Pool({
   connectionString: process.env.DB_URL,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 5000,
+  ssl: useSSL ? { rejectUnauthorized: false } : false
 });
 
 pool.on('connect', () => {

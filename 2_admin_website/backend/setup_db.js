@@ -10,7 +10,11 @@ async function setup() {
     console.error('ERROR: DB_URL environment variable is not set.');
     process.exit(1);
   }
-  const client = new Client({ connectionString: connStr });
+  const useSSL = !connStr.includes('localhost') && !connStr.includes('127.0.0.1');
+  const client = new Client({
+    connectionString: connStr,
+    ssl: useSSL ? { rejectUnauthorized: false } : false
+  });
   await client.connect();
   console.log('Database ready');
 
