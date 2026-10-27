@@ -38,7 +38,7 @@ const s3 = require('../../shared/s3Service');
 // These endpoints maintain the same URL pattern so frontends need no changes.
 // GET /uploads/images/<team>/<title>/<file>  →  S3: CDD/images/<team>/<title>/<file>
 // GET /uploads/documents/<team>/<title>/<file>  →  S3: CDD/documents/<team>/<title>/<file>
-app.get('/uploads/images/*', async (req, res) => {
+app.get(['/uploads/images/*', '/api/uploads/images/*'], async (req, res) => {
   try {
     const relativePath = req.params[0];
     if (!relativePath) return res.status(400).json({ error: 'File path required' });
@@ -74,7 +74,7 @@ app.get('/uploads/images/*', async (req, res) => {
   }
 });
 
-app.get('/uploads/documents/*', async (req, res) => {
+app.get(['/uploads/documents/*', '/api/uploads/documents/*'], async (req, res) => {
   try {
     const relativePath = req.params[0];
     if (!relativePath) return res.status(400).json({ error: 'File path required' });

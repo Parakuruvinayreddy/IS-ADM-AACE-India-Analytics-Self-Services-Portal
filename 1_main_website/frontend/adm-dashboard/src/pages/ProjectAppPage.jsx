@@ -558,16 +558,16 @@ export default function ProjectAppPage() {
 
                     // Build image URLs for the carousel
                     const imageUrls = (match.images || []).map(
-                        f => `/admin/uploads/images/${f.file_path}`
+                        f => `/api/admin/uploads/images/${f.file_path}`
                     );
                     if (!imageUrls.length && match.image_path) {
-                        imageUrls.push(`/admin/uploads/images/${match.image_path}`);
+                        imageUrls.push(`/api/admin/uploads/images/${match.image_path}`);
                     }
 
                     // Build document list for Documentation section
                     const docFiles = (match.documents || []).map(f => ({
                         label:    f.file_name,
-                        href:     `/admin/uploads/documents/${f.file_path}`,
+                        href:     `/api/admin/uploads/documents/${f.file_path}`,
                         live:     true,
                     }));
 

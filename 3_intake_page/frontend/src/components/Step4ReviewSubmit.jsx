@@ -255,8 +255,8 @@ export default function Step4ReviewSubmit({ watch, setValue, setHasExistingImage
                   {data.uploaded_files.map((file, idx) => {
                     const isImg = file.file_type === 'image';
                     const fileUrl = isImg 
-                      ? `/intake/uploads/images/${file.file_path}`
-                      : `/intake/uploads/documents/${file.file_path}`;
+                      ? `/api/intake/uploads/images/${file.file_path}`
+                      : `/api/intake/uploads/documents/${file.file_path}`;
                     return (
                       <div
                         key={idx}
